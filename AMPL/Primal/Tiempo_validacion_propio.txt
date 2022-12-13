@@ -1,0 +1,36 @@
+C = 0.5000
+
+_total_solve_elapsed_time = 0.0682
+
+C = 1.0000
+
+_total_solve_elapsed_time = 0.1120
+
+C = 5.0000
+
+_total_solve_elapsed_time = 0.1494
+
+C = 10.0000
+
+_total_solve_elapsed_time = 0.1909
+
+C = 50.0000
+
+_total_solve_elapsed_time = 0.2308
+
+C = 100.0000
+
+_total_solve_elapsed_time = 0.2697
+
+C = 1000.0000
+
+_total_solve_elapsed_time = 0.3093
+
+C = 5000.0000
+
+_total_solve_elapsed_time = 0.3473
+
+C = 10000.0000
+
+_total_solve_elapsed_time = 0.3973
+
