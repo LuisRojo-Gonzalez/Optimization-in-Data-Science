@@ -1,0 +1,300 @@
+nCUT = 1
+
+Max_bound = -6039
+FO = -6013
+lower_bound_dual = -2522.98
+
+nCUT = 2
+
+Max_bound = -6039
+FO = -5991
+lower_bound_dual = -32938700
+
+nCUT = 3
+
+Max_bound = -6039
+FO = -5982
+lower_bound_dual = -66405800
+
+nCUT = 4
+
+Max_bound = -6039
+FO = -5975
+lower_bound_dual = -103243000
+
+nCUT = 5
+
+Max_bound = -6039
+FO = -5970
+lower_bound_dual = -65920900
+
+nCUT = 6
+
+Max_bound = -6039
+FO = -5906
+lower_bound_dual = -815568000
+
+nCUT = 7
+
+Max_bound = -6039
+FO = -5903
+lower_bound_dual = -1918420000
+
+nCUT = 8
+
+Max_bound = -6039
+FO = -5847
+lower_bound_dual = -279587000
+
+nCUT = 9
+
+Max_bound = -6039
+FO = -5812
+lower_bound_dual = -1835030000
+
+nCUT = 10
+
+Max_bound = -6039
+FO = -5796
+lower_bound_dual = -1918420000
+
+nCUT = 11
+
+Max_bound = -6039
+FO = -5765
+lower_bound_dual = -44269300
+
+nCUT = 12
+
+Max_bound = -6039
+FO = -5764
+lower_bound_dual = -1.1013e+10
+
+nCUT = 13
+
+Max_bound = -6039
+FO = -5740
+lower_bound_dual = -503259000
+
+nCUT = 14
+
+Max_bound = -6039
+FO = -5720
+lower_bound_dual = -914898000
+
+nCUT = 15
+
+Max_bound = -6039
+FO = -5715
+lower_bound_dual = -3159040000
+
+nCUT = 16
+
+Max_bound = -6039
+FO = -5696
+lower_bound_dual = -2231070000
+
+nCUT = 17
+
+Max_bound = -6039
+FO = -5684
+lower_bound_dual = -3152130000
+
+nCUT = 18
+
+Max_bound = -6039
+FO = -5677
+lower_bound_dual = -39622.6
+
+nCUT = 19
+
+Max_bound = -6039
+FO = -5674
+lower_bound_dual = -2758730000
+
+nCUT = 20
+
+Max_bound = -6039
+FO = -5672
+lower_bound_dual = -3152190000
+
+nCUT = 21
+
+Max_bound = -6039
+FO = -5667
+lower_bound_dual = -1362200000
+
+nCUT = 22
+
+Max_bound = -6039
+FO = -5664
+lower_bound_dual = -5873610000
+
+nCUT = 23
+
+Max_bound = -6039
+FO = -5662
+lower_bound_dual = -33201100
+
+nCUT = 24
+
+Max_bound = -6039
+FO = -5636
+lower_bound_dual = -242308000
+
+nCUT = 25
+
+Max_bound = -6039
+FO = -5733
+lower_bound_dual = -5873610000
+
+nCUT = 26
+
+Max_bound = -6039
+FO = -5606
+lower_bound_dual = -3154770000
+
+nCUT = 27
+
+Max_bound = -6039
+FO = -5581
+lower_bound_dual = -17616700000
+
+nCUT = 28
+
+Max_bound = -6039
+FO = -5550
+lower_bound_dual = -33201100
+
+nCUT = 29
+
+Max_bound = -6039
+FO = -5547
+lower_bound_dual = -20529800000
+
+nCUT = 30
+
+Max_bound = -6039
+FO = -5525
+lower_bound_dual = -242308000
+
+nCUT = 31
+
+Max_bound = -6039
+FO = -5510
+lower_bound_dual = -89855500
+
+nCUT = 32
+
+Max_bound = -6039
+FO = -5505
+lower_bound_dual = -101652000
+
+nCUT = 33
+
+Max_bound = -6039
+FO = -5474
+lower_bound_dual = -883532000
+
+nCUT = 34
+
+Max_bound = -6039
+FO = -5556
+lower_bound_dual = -772969000
+
+nCUT = 35
+
+Max_bound = -6039
+FO = -5433
+lower_bound_dual = -3303120000
+
+nCUT = 36
+
+Max_bound = -6039
+FO = -5399
+lower_bound_dual = -20529800000
+
+nCUT = 37
+
+Max_bound = -6039
+FO = -5364
+lower_bound_dual = -1136840000
+
+nCUT = 38
+
+Max_bound = -6039
+FO = -5446
+lower_bound_dual = -242308000
+
+nCUT = 39
+
+Max_bound = -6039
+FO = -5353
+lower_bound_dual = -3154770000
+
+nCUT = 40
+
+Max_bound = -6039
+FO = -5339
+lower_bound_dual = -883532000
+
+nCUT = 41
+
+Max_bound = -6039
+FO = -5308
+lower_bound_dual = -33201100
+
+nCUT = 42
+
+Max_bound = -6039
+FO = -5301
+lower_bound_dual = -19681100000
+
+nCUT = 43
+
+Max_bound = -6039
+FO = -5295
+lower_bound_dual = -150534000
+
+nCUT = 44
+
+Max_bound = -6039
+FO = -5291
+lower_bound_dual = -28537700000
+
+nCUT = 45
+
+Max_bound = -6039
+FO = -5288
+lower_bound_dual = -1.869e+09
+
+nCUT = 46
+
+Max_bound = -6039
+FO = -5257
+lower_bound_dual = -20529800000
+
+nCUT = 47
+
+Max_bound = -6039
+FO = -5251
+lower_bound_dual = -65307700000
+
+nCUT = 48
+
+Max_bound = -6039
+FO = -5246
+lower_bound_dual = -33201100
+
+nCUT = 49
+
+Max_bound = -6039
+FO = -5237
+lower_bound_dual = -21639700000
+
+nCUT = 50
+
+Max_bound = -6039
+FO = -5237
+lower_bound_dual = -3152130000
+
