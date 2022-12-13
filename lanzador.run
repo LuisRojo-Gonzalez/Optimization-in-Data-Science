@@ -1,0 +1,63 @@
+#Reset
+reset;
+
+#MODELO
+model /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/kmedian.mod;
+
+set N = 100 .. 500 by 50; #filas a considerar
+set Q = 14 .. 16; #Cuantos cluster genero
+
+for {n in N}{
+
+  for {q in Q}{
+
+    reset data;
+
+    #DATOS
+    data /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/kmedian.dat;
+
+    # Solver a utilizar
+    option solver cplex;
+    option cplex_options 'mipgap=1.0e-4';
+
+    #cambia numero de filas a considerar
+    let nrow := n;
+
+    #calcula la distancia de manhattan
+    let {(i,j) in {rows,rows}} d[i,j] := sum{p in columns} abs(x[i,p]-x[j,p]);
+
+    #cambia el numero de cluster
+    let k := q;
+
+    #Si la resolucion del problema arroja error se vuelve a resolver
+    repeat {
+      solve;
+      if solve_result != "failure" and solve_result != "unbounded" then break;
+    };
+
+    #---------Muestra cluster de fila segun datos y k-cluster------
+    #Indica opciones de salida para valores
+    option display_round 4; #La salida se aproxima al 5 decimal
+    option display_width 200; #Configura cantidad de caracteres por linea
+
+    #Imprime detalles solucion
+    printf "Real Time: %f \n \n", _solve_elapsed_time+_solve_system_time;
+    printf "Observations: %f \n \n", n;
+    printf "Clusters: %f \n \n", q;
+    display n > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/cluster.txt;
+    display q > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/cluster.txt;
+    for{i in rows}{
+      for{j in rows}{
+        if w[i,j] == 1 then display j > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/cluster.txt;
+      }
+    }
+    display n > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/tiempo.txt;
+    display q > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/tiempo.txt;
+    display _solve_elapsed_time+_solve_system_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/tiempo.txt;
+  }
+}
+
+#Imprime tiempo de ejecucion
+printf "Running Time: %f \n \n", _total_solve_elapsed_time;
+
+display _total_solve_elapsed_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/K-median/tiempototal.txt;
