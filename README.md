@@ -11,3 +11,5 @@ In this, you can find three projects I have developed:
 1. Clustering using K-medians,
 2. Support vector machines, and
 3. Data protection analysis (solved via Bender's decomposition).
+
+Please, check the branches to get the desired example.
