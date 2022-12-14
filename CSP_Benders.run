@@ -1,0 +1,79 @@
+# ----------------------------------------
+#     BENDERS DECOMPOSITION FOR CSP
+# ----------------------------------------
+reset;
+model CSP.mod;
+#data small.dat;
+#data example_2D.dat;
+data targus.dat;
+
+option solver cplex;
+option cplex_options 'mipdisplay 2 mipinterval 100 primal';
+
+option omit_zero_rows 1;
+option display_eps .000001;
+
+problem Master: Y, Max_bound, FO, r4, Cut;
+problem Sub: lambda, mu_l, mu_u, lower_bound_dual, r1, r2, r10;
+
+suffix unbdd OUT;
+
+let nCUT := 0;
+let Max_bound := 0;
+let {i in 1 .. ncells} y[i] := 0;
+
+param GAP default Infinity;
+
+# construye matriz A
+for{i in 1 .. nconstraints}{
+  for{j in 1 .. nnz}{
+    if (j >= begconst[i] and j < begconst[i+1]) then let A[i,xcoef[j]] := coef[j]*a[xcoef[j]];
+  }
+}
+
+repeat { printf "\nITERATION %d\n\n", nCUT+1;
+  #restore r4;
+  solve Sub;
+  printf "\n";
+
+   if Sub.result = "unbounded" then { printf "Sub UNBOUNDED\n";
+      let nCUT := nCUT + 1;
+      let cut_type[nCUT] := "ray";
+      let {i in 1 .. ncells} MU_l[i,nCUT] := mu_l[i].unbdd;
+      let {i in 1 .. ncells} MU_u[i,nCUT] := mu_u[i].unbdd;
+      #let {i in 1 .. ncells} x[i,nCUT] := lambda[i].unbdd;
+      }
+
+      else {
+         if lower_bound_dual <= Max_bound + 0.00001 then break;
+
+         let GAP := min (GAP, lower_bound_dual - Max_bound);
+         option display_1col 0;
+         display GAP;#, Dual_Ship;
+         let nCUT := nCUT + 1;
+         let cut_type[nCUT] := "point";
+         let {i in 1 .. ncells} MU_l[i,nCUT] := mu_l[i];
+         let {i in 1 .. ncells} MU_u[i,nCUT] := mu_u[i];
+         #let {i in 1 .. ncells} x[i,nCUT] := lambda[i];
+         }
+
+   printf "\nRE-SOLVING MASTER PROBLEM\n\n";
+
+   solve Master;
+   printf "\n";
+   option display_1col 20;
+   display Y;
+
+   let {i in 1 .. ncells} y[i] := Y[i];
+
+   display nCUT > solucion.txt;
+   display Max_bound, FO, lower_bound_dual > solucion.txt;
+
+   display nCUT > celdas.txt;
+   display sum{i in 1 .. ncells} Y[i] > celdas.txt;
+   display Y > celdas.txt;
+
+   if nCUT+1 == 51 then break;
+};
+
+option display_1col 0;
