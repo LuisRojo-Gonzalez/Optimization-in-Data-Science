@@ -1,0 +1,18 @@
+_total_solve_elapsed_time = 0.1202
+
+_total_solve_elapsed_time = 0.1737
+
+_total_solve_elapsed_time = 0.2279
+
+_total_solve_elapsed_time = 0.2831
+
+_total_solve_elapsed_time = 0.3522
+
+_total_solve_elapsed_time = 0.4137
+
+_total_solve_elapsed_time = 0.4609
+
+_total_solve_elapsed_time = 0.5198
+
+_total_solve_elapsed_time = 0.5747
+

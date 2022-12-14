@@ -1,0 +1,177 @@
+######### Datos propios
+
+# ------------------------ Formulacion primal ----------------
+
+#Reset
+reset;
+
+#MODELO
+model /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/SVM_primal_1.mod;
+
+set N = {0.5, 1, 5, 10, 50, 100, 1000, 5000, 10000}; #Tunning C
+
+for {n in N}{
+  reset data;
+
+  #DATOS
+  data /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/SVM_generados.dat;
+
+  # Cambio el parametro C
+  let C := n;
+
+  # Cambia el numero de filas para entrenamiento
+  let ntrain := 750;
+
+  # Solver a utiliza
+  option solver cplex;
+  option cplex_options 'mipgap = 1.0e-4';
+  solve;
+
+  #Indica opciones de salida para valores
+  option display_round 4; #La salida se aproxima al 5 decimal
+  option display_width 200; #Configura cantidad de caracteres por linea
+
+  ####### Entrenamiento
+
+  #Imprime detalles solucion y error entrenamiento
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_generados.txt;
+  for{i in rows: i <= ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 then print 1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_generados.txt;
+    else print -1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_generados.txt;
+  }
+
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Plano_generados.txt;
+  display w > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Plano_generados.txt;
+  display B > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Plano_generados.txt;
+
+  let aux := 0;
+
+  # si esta mal clasificado no suma al contador
+  for{i in rows: i <= ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 and d[i] < 0 or (sum{j in columns} w[j]*A[i,j]+B) < 0 and d[i] > 0 then continue;
+    else let aux := aux+1;
+  }
+
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Trainning_Error_generados.txt;
+  display 1 - aux/ntrain > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Trainning_Error_generados.txt;
+
+  #Imprime tiempo de ejecucion
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Tiempo_generados.txt;
+  display _total_solve_elapsed_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Tiempo_generados.txt;
+
+  ####### Validacion
+
+  #Imprime detalles y error validacion
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_validacion_generados.txt;
+  for{i in rows: i > ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 then print 1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_validacion_generados.txt;
+    else print -1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Clasificacion_validacion_generados.txt;
+  }
+
+  let aux := 0;
+  # si esta mal clasificado no suma al contador
+  for{i in rows: i > ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 and d[i] < 0 or (sum{j in columns} w[j]*A[i,j]+B) < 0 and d[i] > 0 then continue;
+    else let aux := aux+1;
+  }
+
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Validacion_Error_generados.txt;
+  display 1 - aux/(card(rows)-ntrain) > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Validacion_Error_generados.txt;
+
+  #Imprime tiempo de ejecucion
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Tiempo_propio.txt;
+  display _total_solve_elapsed_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Primal/Tiempo_validacion_generados.txt;
+}
+
+# ------------------------ Formulacion dual ----------------
+
+#Reset
+reset;
+
+#MODELO
+model /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/SVM_dual_1.mod;
+
+set N = {0.5, 1, 5, 10, 50, 100, 1000, 5000, 10000}; #Tunning C
+
+for {n in N}{
+  reset data;
+
+  #DATOS
+  data /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/SVM_generados.dat;
+
+  # Cambio el parametro C
+  let C := n;
+
+  # Defino tamaño de entrenamiento
+  let ntrain := 750;
+
+  # Calcula el kernel
+  for{i in rows: i <= ntrain}{
+    for{j in rows: j <= ntrain}{
+      let K[i,j] := sum{p in columns} A[i,p]*A[j,p];
+    }
+  }
+
+  # Solver a utiliza
+  option solver cplex;
+  option cplex_options 'mipgap = 1.0e-4';
+  solve;
+
+  # Determinacion variables originales
+  let {j in columns} w[j] := sum{i in rows: i <= ntrain and lambda[i] > 0} lambda[i]*d[i]*A[i,j];
+
+  for{i in rows: i <= ntrain}{
+    if round(lambda[i],4) == 0 or round(lambda[i],4) == C then continue;
+    else let B := sum{j in columns} -w[j]*A[i,j]+1/d[i];
+    display B;
+  }
+
+  #Indica opciones de salida para valores
+  option display_round 4; #La salida se aproxima al 5 decimal
+  option display_width 200; #Configura cantidad de caracteres por linea
+
+  #Imprime detalles solucion y error entrenamiento
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_generados.txt;
+  for{i in rows: i <= ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 then print 1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_generados.txt;
+    else print -1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_generados.txt;
+  }
+
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Plano_generados.txt;
+  display w > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Plano_generados.txt;
+  display B > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Plano_generados.txt;
+
+  let aux := 0;
+  for{i in rows: i <= ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 and d[i] < 0 or (sum{j in columns} w[j]*A[i,j]+B) < 0 and d[i] > 0 then continue;
+    else let aux := aux+1;
+  }
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Trainning_Error_generados.txt;
+  display 1 - aux/ntrain > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Trainning_Error_generados.txt;
+
+  #Imprime tiempo de ejecucion
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Tiempo_generados.txt;
+  display _total_solve_elapsed_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Tiempo_generados.txt;
+
+  ####### Validacion
+
+  #Imprime detalles y error validacion
+
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_validacion_generados.txt;
+  for{i in rows: i > ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 then print 1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_validacion_generados.txt;
+    else print -1 > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Clasificacion_validacion_generados.txt;
+  }
+
+  let aux := 0;
+  for{i in rows: i > ntrain}{
+    if (sum{j in columns} w[j]*A[i,j]+B) > 0 and d[i] < 0 or (sum{j in columns} w[j]*A[i,j]+B) < 0 and d[i] > 0 then continue;
+    else let aux := aux+1;
+  }
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Validacion_Error_generados.txt;
+  display 1 - (aux/(card(rows)-ntrain)) > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Validacion_Error_generados.txt;
+
+  #Imprime tiempo de ejecucion
+  display C > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Tiempo_validacion_generados.txt;
+  display _total_solve_elapsed_time > /Users/luisrojo/Desktop/UPC/ODS/Tareas/SVM/AMPL/Dual/Tiempo_validacion_generados.txt;
+}
